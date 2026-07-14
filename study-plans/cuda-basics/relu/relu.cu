@@ -34,8 +34,9 @@ __global__ void relu_kernel(const float* input, float* output, int N) {
 }
 
 extern "C" void solve(const float* input, float* output, int N) {
-    int threads = 256;
-    int blocks = (N + threads - 1) / threads;
+    int threads = 256; 
+    int vec = N/4 ; 
+    int blocks = fmaxf(1,(vec + threads - 1) / threads);
     relu_kernel<<<blocks, threads>>>(input, output, N);
     cudaDeviceSynchronize();
 }
